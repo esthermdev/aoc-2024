@@ -10,13 +10,13 @@ let dontIdx = []
 let doIdx = []
 let mulIdx = {}
 
-while ((result = dontPattern.exec(input))) {
+while ((result = dontPattern.exec(inputText))) {
   dontIdx.push(result.index)
 }
-while ((result = doPattern.exec(input))) {
+while ((result = doPattern.exec(inputText))) {
   doIdx.push(result.index)
 }
-while ((result = mulPattern.exec(input))) {
+while ((result = mulPattern.exec(inputText))) {
   mulIdx[result.index] = result[0]
 }
 
@@ -28,7 +28,7 @@ function getLatestDont(index) {
     return null
   }
 
-  for (let i = 0; i < dontIdx.length; i++) {
+  for (let i = dontIdx.length; i >= 0; i--) {
     if (index > dontIdx[i]) {
       return dontIdx[i]
     }
@@ -42,7 +42,7 @@ function getLatestDo(index) {
     return null
   }
 
-  for (let i = 0; i < doIdx.length; i++) {
+  for (let i = doIdx.length; i >= 0; i--) {
     if (index > doIdx[i]) {
       return doIdx[i]
     }
@@ -50,19 +50,20 @@ function getLatestDo(index) {
   return null
 }
 
+
 let doInstructionsArray = []
 for (let key in mulIdx) {
   let value = mulIdx[key];
 
-  if (getLatestDont(key) > getLatestDo(key)) {
-    console.log(`This index ${value} comes after dont.`)
-  } else {
-    console.log(`This index ${value} comes after do and/or before dont.`)
+  if (getLatestDont(key) === null || getLatestDo(key) > getLatestDont(key)) {
+    console.log(`This index ${value} comes after do.`)
     doInstructionsArray.push(value)
+  } else {
+    console.log(`This index ${value} comes after dont.`)
   }
 }
 
-console.log(doInstructionsArray)
+console.log("Do instructions: ", doInstructionsArray)
 
 let resultArray = []
 for (let i = 0; i < doInstructionsArray.length; i++) {
@@ -72,11 +73,11 @@ for (let i = 0; i < doInstructionsArray.length; i++) {
   resultArray.push(result)
 }
 
-console.log(resultArray)
+console.log("Multiplied do instructions: ", resultArray)
 
 let sum = 0
 for (let i = 0; i < resultArray.length; i++) {
   sum = sum + resultArray[i]
 }
 
-console.log(sum)
+console.log('Total value of multiplied numbers: ', sum)
